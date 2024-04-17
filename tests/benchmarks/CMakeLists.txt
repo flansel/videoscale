@@ -1,0 +1,2 @@
+add_executable(vsf_nn_benchmark vsf_nn_benchmark.c)
+target_link_libraries(vsf_nn_benchmark videoscale)
