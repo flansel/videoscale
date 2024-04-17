@@ -7,7 +7,7 @@
 
 static void *task(void *arg) {
     struct VSThreadPool *pool = arg;
-    struct VSThreadTask current;
+    struct VSThreadTask *current;
 
     while (pool->running) {
         pthread_mutex_lock(&pool->task_queue_mut);
@@ -19,7 +19,8 @@ static void *task(void *arg) {
         pthread_mutex_unlock(&pool->task_queue_mut);
 
         if (err == 0) {
-            current.ret = current.task(current.user);
+            current->ret = current->task(current->user);
+            current->finished = true;
         }
     }
 
@@ -53,6 +54,8 @@ void vs_thread_pool_deinit(struct VSThreadPool *pool) {
 
 int vs_thread_pool_schedule_task(struct VSThreadPool *pool, struct VSThreadTask *task) {
     pthread_mutex_lock(&pool->task_queue_mut);
+    task->finished = false;
+    task->ret = NULL;
     int err = vs_queue_push(&pool->task_queue, &task);
     pthread_cond_broadcast(&pool->new_task_condition);
     pthread_mutex_unlock(&pool->task_queue_mut);

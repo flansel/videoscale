@@ -13,8 +13,8 @@
 
 #define INPUT_W (1280)
 #define INPUT_H (720)
-#define OUTPUT_W (640)
-#define OUTPUT_H (360)
+#define OUTPUT_W (1920)
+#define OUTPUT_H (1080)
 
 int main(int argc, char **argv) {
     struct VSFrame frame, out;
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     int luma_size = INPUT_W * INPUT_H;
     int chroma_size = INPUT_W / 2 * INPUT_H / 2;
 
-    FILE *test_yuv_image = fopen("/home/felix/VideoScale/app/assets/torvalds-1280x720.yuv", "r");
+    FILE *test_yuv_image = fopen("app/assets/torvalds-1280x720.yuv", "r");
     if (test_yuv_image == NULL)
         return -1;
     fread(frame.data.data, luma_size + (chroma_size * 2), 1, test_yuv_image);
